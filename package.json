@@ -1,0 +1,12 @@
+{
+  "name": "seha-sick-leave-report",
+  "version": "1.0.0",
+  "description": "Interactive sick leave report (Arabic + English) for deployment on Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

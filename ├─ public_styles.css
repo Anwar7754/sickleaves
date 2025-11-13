@@ -1,0 +1,27 @@
+body {
+  background: #f6f8fb;
+  font-family: "Segoe UI",Tahoma,Arial,"Helvetica Neue",Helvetica, sans-serif;
+  direction: rtl;
+}
+.report {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(18, 38, 63, 0.08);
+}
+.report-inner table th {
+  width: 35%;
+  background: #f1f8ff;
+  vertical-align: middle;
+  text-align: right;
+}
+.report-inner table td {
+  vertical-align: middle;
+}
+.arabic { font-weight:700; color:#0d6efd; }
+.english { font-size:14px; }
+.controls .btn { min-width: 170px; }
+@media print {
+  .controls, .card .card-body { display:none !important; }
+  body { background: #fff; }
+  .report { box-shadow: none; border: none; }
+}

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تقرير إجازة مرضية — Sick Leave Report</title>
+
+  <!-- bootstrap CDN (optional) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- html2pdf for client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Seha_Logo.png" alt="Seha" style="height:48px;">
+      </div>
+      <div class="title text-center">
+        <h2 class="arabic mb-0">تقرير إجازة مرضية</h2>
+        <h4 class="english text-muted">Sick Leave Report</h4>
+      </div>
+      <div style="width:48px;"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls mb-3 d-flex gap-2 flex-wrap justify-content-end">
+      <button id="verifyBtn" class="btn btn-outline-primary">🔍 تحقق من صحة التقرير</button>
+      <button id="printBtn" class="btn btn-outline-secondary">🖨️ طباعة</button>
+      <button id="pdfBtn" class="btn btn-outline-success">💾 حفظ كـ PDF</button>
+      <button id="resetBtn" class="btn btn-outline-warning">🔄 تحديث</button>
+    </div>
+
+    <!-- Form + report -->
+    <div class="row">
+      <div class="col-md-5">
+        <!-- Form inputs (RTL layout) -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">بيانات التقرير (أدخل أو حرّر)</h5>
+
+            <div class="mb-2">
+              <label class="form-label">رمز الإجازة / Leave ID</label>
+              <input id="field_leaveId" class="form-control" placeholder="GSL24101715016">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">مدة الإجازة / Leave Duration</label>
+              <input id="field_duration" class="form-control" placeholder="1 day (17-10-2024)">
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-2">
+                <label class="form-label">تاريخ الدخول</label>
+                <input id="field_admission" class="form-control" placeholder="17-10-2024">
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label">تاريخ الخروج</label>
+                <input id="field_dicharge" class="form-control" placeholder="17-10-2024">
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">تاريخ اصدار التقرير / Issue Date</label>
+              <input id="field_issue" class="form-control" placeholder="17-10-2024">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">الاسم / Name</label>
+              <input id="field_name" class="form-control" placeholder="RAWAN MUHAMMAD ASIRI">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">رقم الهوية/الإقامة / National ID/Iqama</label>
+              <input id="field_nid" class="form-control" placeholder="1096269640">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">الجنسية / Nationality</label>
+              <input id="field_nationality" class="form-control" placeholder="Saudi Arabia">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">جهة العمل / Employer</label>
+              <input id="field_employer" class="form-control" placeholder="شركة ...">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">اسم الطبيب / Physician Name</label>
+              <input id="field_physician" class="form-control" placeholder="OMAR KHALAF ...">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">الصفة الوظيفية / Position</label>
+              <input id="field_position" class="form-control" placeholder="Medicine">
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+              <button id="applyBtn" class="btn btn-primary w-100">تطبيق على التقرير</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-7">
+        <!-- Printable report area -->
+        <div id="reportArea" class="report card p-3">
+          <div class="report-inner p-3">
+            <table class="table table-bordered mb-3">
+              <tbody>
+                <tr>
+                  <th class="text-end">رمز الإجازة<br/><small class="text-muted">Leave ID</small></th>
+                  <td id="r_leaveId">GSL24101715016</td>
+                </tr>
+                <tr>
+                  <th class="text-end">مدة الإجازة<br/><small class="text-muted">Leave Duration</small></th>
+                  <td id="r_duration">1 day (17-10-2024)</td>
+                </tr>
+                <tr>
+                  <th class="text-end">تاريخ الدخول / Admission Date</th>
+                  <td id="r_admission">17-10-2024</td>
+                </tr>
+                <tr>
+                  <th class="text-end">تاريخ الخروج / Discharge Date</th>
+                  <td id="r_discharge">17-10-2024</td>
+                </tr>
+                <tr>
+                  <th class="text-end">تاريخ اصدار التقرير / Issue Date</th>
+                  <td id="r_issue">17-10-2024</td>
+                </tr>
+                <tr>
+                  <th class="text-end">الاسم / Name</th>
+                  <td id="r_name">RAWAN MUHAMMAD ASIRI</td>
+                </tr>
+                <tr>
+                  <th class="text-end">رقم الهوية/الإقامة / National ID/Iqama</th>
+                  <td id="r_nid">1096269640</td>
+                </tr>
+                <tr>
+                  <th class="text-end">الجنسية / Nationality</th>
+                  <td id="r_nationality">Saudi Arabia</td>
+                </tr>
+                <tr>
+                  <th class="text-end">جهة العمل / Employer</th>
+                  <td id="r_employer">شركة على رضاء الخدمات الغذائية</td>
+                </tr>
+                <tr>
+                  <th class="text-end">اسم الطبيب / Physician Name</th>
+                  <td id="r_physician">OMAR KHALAF KHALED AL ENEZI</td>
+                </tr>
+                <tr>
+                  <th class="text-end">الصفة الوظيفية / Position</th>
+                  <td id="r_position">Medicine</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <small class="text-muted">للتأكد من صحة التقرير زر التحقق</small>
+              <div id="verifyResult" class="text-success"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-4 text-center text-muted">
+      <small>نموذج تجريبي — يمكنك نشره على Render</small>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
